@@ -40,6 +40,7 @@ h2{font-family:var(--f-display);font-weight:700;font-size:1.35rem;letter-spacing
 .row{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.88rem}
 .chip{display:inline-block;font-size:.75rem;padding:2px 8px;border-radius:99px;border:1px solid var(--line);color:var(--muted)}
 .chip.up{color:var(--up);border-color:var(--up)} .chip.down{color:var(--down);border-color:var(--down)}
+.times{display:grid;grid-template-columns:1fr 1fr;gap:8px}.times>div{display:grid;gap:2px;padding:8px 10px;border:1px solid var(--line);border-radius:8px}.times b{font-size:1.05rem}
 .others{font-size:.82rem;color:var(--muted);border-top:1px dashed var(--line);padding-top:8px;display:grid;gap:2px}
 a{color:var(--accent)} a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .none{color:var(--muted);font-size:.9rem}
@@ -63,7 +64,7 @@ summary .mono{color:var(--muted);font-size:.85rem}
   <header class="board">
     <h1>BANGKOK · 12/20–12/26</h1>
     <div class="meta">
-      <span>高雄 KHH 直飛 · 6 人</span><span>桃園 TPE · 2 人</span><span>經濟艙來回 · 回程 12/26</span>
+      <span>高雄 KHH 直飛 · 6 人</span><span>桃園 TPE · 2 人</span><span>經濟艙來回 · 回程 12/26 · 價格含託運行李</span>
     </div>
     <div class="meta"><span id="updated">等待第一份報告</span></div>
   </header>
@@ -129,9 +130,9 @@ function ticket(r,rep,prev){
   }
   const url=safeUrl(low.url);
   return `<article class="ticket">${head}
-    <div><div class="price">${fmt(low.price_total)}</div>${r.pax>1?`<div class="pp">每人 ${fmt(perPerson(r,low))}</div>`:""}</div>
+    <div><div class="price">${fmt(low.price_total)}</div><div class="pp">${r.pax>1?`每人 ${fmt(perPerson(r,low))} · `:""}含託運行李${typeof low.price_no_bag==="number"?` · 不含行李 ${fmt(low.price_no_bag)}`:""}</div></div>
     <div class="row"><span class="mono">${esc(low.airline)} ${esc(low.flight)}</span>${delta}${low.baggage?`<span class="chip">${esc(low.baggage)}</span>`:""}</div>
-    ${low.times?`<div class="row mono" style="font-size:.82rem">${esc(low.times)}</div>`:""}
+    ${(low.out||low.back)?`<div class="times"><div><span class="tag">去程 ${r.dep}</span><b class="mono">${esc(low.out||"—")}</b></div><div><span class="tag">回程 12/26</span><b class="mono">${esc(low.back||"—")}</b></div></div>`:(low.times?`<div class="row mono" style="font-size:.82rem">${esc(low.times)}</div>`:"")}
     <div class="row">來源：${url?`<a href="${esc(url)}" target="_blank" rel="noopener">${esc(low.source)}</a>`:esc(low.source)}</div>
     ${(x.others||[]).length?`<div class="others">${x.others.map(o=>`<span>${esc(o.source)}：${fmt(o.price_total)}${o.airline?" · "+esc(o.airline):""}</span>`).join("")}</div>`:""}
     ${missing(x)}</article>`;
