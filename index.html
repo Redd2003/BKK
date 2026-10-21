@@ -71,15 +71,15 @@ summary .mono{color:var(--muted);font-size:.85rem}
   <section>
     <h2>今日最低價</h2>
     <div id="tickets" class="tickets">
-      <div class="empty">每天下午 2 點前後，這裡會出現 4 組行程的最低價。</div>
+      <div class="empty">每天凌晨 0:30 和下午 2 點前後，這裡會出現 4 組行程的最低價。</div>
     </div>
   </section>
 
   <section>
     <h2>價格走勢</h2>
     <div class="charts">
-      <div class="chart"><h3>高雄出發 · 每人價</h3><div class="legend"><span><i style="background:var(--accent)"></i>12/20 去</span><span><i style="background:var(--alt)"></i>12/21 去</span></div><div id="chart-khh" class="none">累積兩天以上資料後顯示</div></div>
-      <div class="chart"><h3>桃園出發 · 1 人</h3><div class="legend"><span><i style="background:var(--accent)"></i>12/20 去</span><span><i style="background:var(--alt)"></i>12/21 去</span></div><div id="chart-tpe" class="none">累積兩天以上資料後顯示</div></div>
+      <div class="chart"><h3>高雄出發 · 每人價</h3><div class="legend"><span><i style="background:var(--accent)"></i>12/20 去</span><span><i style="background:var(--alt)"></i>12/21 去</span></div><div id="chart-khh" class="none">累積兩次以上資料後顯示</div></div>
+      <div class="chart"><h3>桃園出發 · 1 人</h3><div class="legend"><span><i style="background:var(--accent)"></i>12/20 去</span><span><i style="background:var(--alt)"></i>12/21 去</span></div><div id="chart-tpe" class="none">累積兩次以上資料後顯示</div></div>
     </div>
   </section>
 
@@ -142,7 +142,7 @@ function chart(id,reports,keys,pax){
   const rs=ROUTES.filter(r=>keys.includes(r.k));
   const series=rs.map(r=>reports.map((rep,i)=>({i,v:perPerson(r,rep.routes?.[r.k]?.lowest)})).filter(p=>typeof p.v==="number"));
   const all=series.flat().map(p=>p.v);
-  if(reports.length<2||!all.length){$(id).className="none";$(id).textContent="累積兩天以上資料後顯示";return}
+  if(reports.length<2||!all.length){$(id).className="none";$(id).textContent="累積兩次以上資料後顯示";return}
   const W=440,H=200,L=58,R=12,T=12,B=28,n=reports.length;
   let lo=Math.min(...all),hi=Math.max(...all);
   if(lo===hi){lo-=500;hi+=500}
