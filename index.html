@@ -63,7 +63,7 @@ summary .mono{color:var(--muted);font-size:.85rem}
   <header class="board">
     <h1>BANGKOK · 12/20–12/26</h1>
     <div class="meta">
-      <span>高雄 KHH 直飛 · 6 人</span><span>桃園 TPE · 1 人</span><span>經濟艙來回 · 回程 12/26</span>
+      <span>高雄 KHH 直飛 · 6 人</span><span>桃園 TPE · 2 人</span><span>經濟艙來回 · 回程 12/26</span>
     </div>
     <div class="meta"><span id="updated">等待第一份報告</span></div>
   </header>
@@ -79,7 +79,7 @@ summary .mono{color:var(--muted);font-size:.85rem}
     <h2>價格走勢</h2>
     <div class="charts">
       <div class="chart"><h3>高雄出發 · 每人價</h3><div class="legend"><span><i style="background:var(--accent)"></i>12/20 去</span><span><i style="background:var(--alt)"></i>12/21 去</span></div><div id="chart-khh" class="none">累積兩次以上資料後顯示</div></div>
-      <div class="chart"><h3>桃園出發 · 1 人</h3><div class="legend"><span><i style="background:var(--accent)"></i>12/20 去</span><span><i style="background:var(--alt)"></i>12/21 去</span></div><div id="chart-tpe" class="none">累積兩次以上資料後顯示</div></div>
+      <div class="chart"><h3>桃園出發 · 每人價</h3><div class="legend"><span><i style="background:var(--accent)"></i>12/20 去</span><span><i style="background:var(--alt)"></i>12/21 去</span></div><div id="chart-tpe" class="none">累積兩次以上資料後顯示</div></div>
     </div>
   </section>
 
@@ -95,8 +95,8 @@ summary .mono{color:var(--muted);font-size:.85rem}
 const ROUTES=[
   {k:"A",from:"KHH",dep:"12/20",pax:6,grp:"khh"},
   {k:"B",from:"KHH",dep:"12/21",pax:6,grp:"khh"},
-  {k:"C",from:"TPE",dep:"12/20",pax:1,grp:"tpe"},
-  {k:"D",from:"TPE",dep:"12/21",pax:1,grp:"tpe"},
+  {k:"C",from:"TPE",dep:"12/20",pax:2,grp:"tpe"},
+  {k:"D",from:"TPE",dep:"12/21",pax:2,grp:"tpe"},
 ];
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -113,7 +113,7 @@ function render(reports){
   $("updated").className="mono";
   $("tickets").innerHTML=ROUTES.map(r=>ticket(r,latest,prev)).join("");
   chart("chart-khh",reports,["A","B"],6);
-  chart("chart-tpe",reports,["C","D"],1);
+  chart("chart-tpe",reports,["C","D"],2);
   $("log").innerHTML=reports.slice().reverse().map(rep=>`<details><summary><b>${esc(lab(rep))}</b><span class="mono">${ROUTES.map(r=>r.k+" "+fmt(perPerson(r,rep.routes?.[r.k]?.lowest))).join(" · ")}</span></summary>${rep.summary?`<p>${esc(rep.summary)}</p>`:""}${ROUTES.map(r=>{const x=rep.routes?.[r.k];return `<p class="others"><b>${r.from} 去 ${r.dep}</b>${x?.lowest?` ${esc(x.lowest.airline)} ${esc(x.lowest.flight)} · ${fmt(x.lowest.price_total)} · ${esc(x.lowest.source)}`:" 沒查到"}${x?.note?`<span>${esc(x.note)}</span>`:""}</p>`}).join("")}</details>`).join("");
 }
 
