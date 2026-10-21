@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>曼谷機票比價</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@500&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<style>
+*{box-sizing:border-box}html{color-scheme:light}body{margin:0}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+/* Layout: departure-board header, then four route tickets, then two trend charts, then daily log */
+:root{
+  --bg:#EEF3F5; --surface:#FFFFFF; --fg:#13212B; --muted:#5B6E7A; --line:#D3DEE4;
+  --accent:#0E6B78; --alt:#C9821C; --up:#C0392B; --down:#1E8A55; --board:#13212B; --board-fg:#F2F7F9;
+  --f-display:"Barlow Condensed","Noto Sans TC",system-ui,sans-serif;
+  --f-body:"Noto Sans TC",system-ui,-apple-system,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0F1A21; --surface:#17252E; --fg:#E6EEF2; --muted:#93A6B1; --line:#2A3B46;
+  --accent:#4FB9C6; --alt:#E8A848; --up:#F07563; --down:#5CC98E; --board:#0A1318; --board-fg:#E6EEF2; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F1A21; --surface:#17252E; --fg:#E6EEF2; --muted:#93A6B1; --line:#2A3B46;
+  --accent:#4FB9C6; --alt:#E8A848; --up:#F07563; --down:#5CC98E; --board:#0A1318; --board-fg:#E6EEF2; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.55}
+.wrap{max-width:960px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px;display:grid;gap:28px}
+.board{background:var(--board);color:var(--board-fg);border-radius:10px;padding:18px 20px;display:grid;gap:10px}
+.board h1{font-family:var(--f-display);font-weight:700;font-size:2rem;letter-spacing:.02em;margin:0;line-height:1.1}
+.board .meta{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.85rem;opacity:.85}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+h2{font-family:var(--f-display);font-weight:700;font-size:1.35rem;letter-spacing:.03em;margin:0 0 12px;text-wrap:balance}
+.tickets{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:14px}
+.ticket{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:grid;gap:10px;min-width:0}
+.t-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.route{font-family:var(--f-mono);font-size:1.05rem}
+.route b{color:var(--accent)}
+.tag{font-size:.75rem;letter-spacing:.06em;color:var(--muted)}
+.price{font-family:var(--f-display);font-weight:700;font-size:2.2rem;line-height:1;font-variant-numeric:tabular-nums}
+.pp{color:var(--muted);font-size:.85rem}
+.row{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.88rem}
+.chip{display:inline-block;font-size:.75rem;padding:2px 8px;border-radius:99px;border:1px solid var(--line);color:var(--muted)}
+.chip.up{color:var(--up);border-color:var(--up)} .chip.down{color:var(--down);border-color:var(--down)}
+.others{font-size:.82rem;color:var(--muted);border-top:1px dashed var(--line);padding-top:8px;display:grid;gap:2px}
+a{color:var(--accent)} a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.none{color:var(--muted);font-size:.9rem}
+.charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:14px}
+.chart{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;min-width:0}
+.chart h3{margin:0 0 4px;font-size:.95rem;font-weight:700}
+.legend{display:flex;gap:14px;font-size:.78rem;color:var(--muted);margin-bottom:6px}
+.legend i{display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin-right:4px}
+.chart svg{width:100%;height:auto;display:block}
+.log{display:grid;gap:8px}
+details{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 14px}
+summary{cursor:pointer;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+summary .mono{color:var(--muted);font-size:.85rem}
+.empty{background:var(--surface);border:1px dashed var(--line);border-radius:10px;padding:24px;color:var(--muted);text-align:center}
+.foot{font-size:.78rem;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="board">
+    <h1>BANGKOK · 12/20–12/26</h1>
+    <div class="meta">
+      <span>高雄 KHH 直飛 · 6 人</span><span>桃園 TPE · 1 人</span><span>經濟艙來回 · 回程 12/26</span>
+    </div>
+    <div class="meta"><span id="updated">等待第一份報告</span></div>
+  </header>
+
+  <section>
+    <h2>今日最低價</h2>
+    <div id="tickets" class="tickets">
+      <div class="empty">每天下午 2 點前後，這裡會出現 4 組行程的最低價。</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>價格走勢</h2>
+    <div class="charts">
+      <div class="chart"><h3>高雄出發 · 每人價</h3><div class="legend"><span><i style="background:var(--accent)"></i>12/20 去</span><span><i style="background:var(--alt)"></i>12/21 去</span></div><div id="chart-khh" class="none">累積兩天以上資料後顯示</div></div>
+      <div class="chart"><h3>桃園出發 · 1 人</h3><div class="legend"><span><i style="background:var(--accent)"></i>12/20 去</span><span><i style="background:var(--alt)"></i>12/21 去</span></div><div id="chart-tpe" class="none">累積兩天以上資料後顯示</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>每日紀錄</h2>
+    <div id="log" class="log"><div class="none">還沒有紀錄。</div></div>
+  </section>
+
+  <p class="foot">價格為查詢當下的參考價，實際以訂票頁面為準。查不到的來源會直接標示，不估算。</p>
+</div>
+
+<script>
+const ROUTES=[
+  {k:"A",from:"KHH",dep:"12/20",pax:6,grp:"khh"},
+  {k:"B",from:"KHH",dep:"12/21",pax:6,grp:"khh"},
+  {k:"C",from:"TPE",dep:"12/20",pax:1,grp:"tpe"},
+  {k:"D",from:"TPE",dep:"12/21",pax:1,grp:"tpe"},
+];
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt=n=>typeof n==="number"&&isFinite(n)?"NT$"+Math.round(n).toLocaleString("en-US"):"—";
+const md=d=>{const p=String(d).split("-");return p.length===3?(+p[1])+"/"+(+p[2]):d};
+const lab=rep=>{const t=String(rep.checked_at||"").match(/\d{1,2}:\d{2}/);return md(rep.date)+(t?" "+t[0]:"")};
+const safeUrl=u=>/^https?:\/\//i.test(u||"")?u:"";
+const perPerson=(r,low)=>low?(typeof low.price_pp==="number"?low.price_pp:(typeof low.price_total==="number"?low.price_total/r.pax:null)):null;
+
+function render(reports){
+  if(!reports.length) return;
+  const latest=reports[reports.length-1], prev=reports.length>1?reports[reports.length-2]:null;
+  $("updated").textContent="最後更新 "+(latest.checked_at||latest.date);
+  $("updated").className="mono";
+  $("tickets").innerHTML=ROUTES.map(r=>ticket(r,latest,prev)).join("");
+  chart("chart-khh",reports,["A","B"],6);
+  chart("chart-tpe",reports,["C","D"],1);
+  $("log").innerHTML=reports.slice().reverse().map(rep=>`<details><summary><b>${esc(lab(rep))}</b><span class="mono">${ROUTES.map(r=>r.k+" "+fmt(perPerson(r,rep.routes?.[r.k]?.lowest))).join(" · ")}</span></summary>${rep.summary?`<p>${esc(rep.summary)}</p>`:""}${ROUTES.map(r=>{const x=rep.routes?.[r.k];return `<p class="others"><b>${r.from} 去 ${r.dep}</b>${x?.lowest?` ${esc(x.lowest.airline)} ${esc(x.lowest.flight)} · ${fmt(x.lowest.price_total)} · ${esc(x.lowest.source)}`:" 沒查到"}${x?.note?`<span>${esc(x.note)}</span>`:""}</p>`}).join("")}</details>`).join("");
+}
+
+function ticket(r,rep,prev){
+  const x=rep.routes?.[r.k]||{}, low=x.lowest;
+  const head=`<div class="t-head"><span class="route">${r.from} <b>→</b> BKK${r.from==="KHH"?" 直飛":""}</span><span class="tag">去 ${r.dep} · 回 12/26 · ${r.pax} 人</span></div>`;
+  if(!low) return `<article class="ticket">${head}<div class="none">今天沒查到價格。${x.note?esc(x.note):""}</div>${missing(x)}</article>`;
+  let delta="";
+  const p0=prev?.routes?.[r.k]?.lowest?.price_total;
+  if(typeof p0==="number"&&typeof low.price_total==="number"){
+    const d=low.price_total-p0;
+    delta=d===0?`<span class="chip">與上一次持平</span>`:`<span class="chip ${d>0?"up":"down"}">${d>0?"▲ 漲":"▼ 跌"} ${fmt(Math.abs(d))}</span>`;
+  }
+  const url=safeUrl(low.url);
+  return `<article class="ticket">${head}
+    <div><div class="price">${fmt(low.price_total)}</div>${r.pax>1?`<div class="pp">每人 ${fmt(perPerson(r,low))}</div>`:""}</div>
+    <div class="row"><span class="mono">${esc(low.airline)} ${esc(low.flight)}</span>${delta}${low.baggage?`<span class="chip">${esc(low.baggage)}</span>`:""}</div>
+    ${low.times?`<div class="row mono" style="font-size:.82rem">${esc(low.times)}</div>`:""}
+    <div class="row">來源：${url?`<a href="${esc(url)}" target="_blank" rel="noopener">${esc(low.source)}</a>`:esc(low.source)}</div>
+    ${(x.others||[]).length?`<div class="others">${x.others.map(o=>`<span>${esc(o.source)}：${fmt(o.price_total)}${o.airline?" · "+esc(o.airline):""}</span>`).join("")}</div>`:""}
+    ${missing(x)}</article>`;
+}
+const missing=x=>(x.missing||[]).length?`<div class="others">沒查到：${x.missing.map(esc).join("、")}</div>`:"";
+
+function chart(id,reports,keys,pax){
+  const rs=ROUTES.filter(r=>keys.includes(r.k));
+  const series=rs.map(r=>reports.map((rep,i)=>({i,v:perPerson(r,rep.routes?.[r.k]?.lowest)})).filter(p=>typeof p.v==="number"));
+  const all=series.flat().map(p=>p.v);
+  if(reports.length<2||!all.length){$(id).className="none";$(id).textContent="累積兩天以上資料後顯示";return}
+  const W=440,H=200,L=58,R=12,T=12,B=28,n=reports.length;
+  let lo=Math.min(...all),hi=Math.max(...all);
+  if(lo===hi){lo-=500;hi+=500}
+  const step=niceStep((hi-lo)/4); lo=Math.floor(lo/step)*step; hi=Math.ceil(hi/step)*step;
+  const x=i=>L+(n===1?0:i*(W-L-R)/(n-1)), y=v=>T+(hi-v)*(H-T-B)/(hi-lo);
+  let g="";
+  for(let v=lo;v<=hi+1e-6;v+=step){g+=`<line x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${L-6}" y="${y(v)+4}" text-anchor="end" font-size="10" fill="var(--muted)" font-family="var(--f-mono)">${Math.round(v).toLocaleString("en-US")}</text>`}
+  const every=Math.max(1,Math.ceil(n/6));
+  reports.forEach((rep,i)=>{if(i%every===0||i===n-1)g+=`<text x="${x(i)}" y="${H-8}" text-anchor="middle" font-size="10" fill="var(--muted)" font-family="var(--f-mono)">${esc(lab(rep))}</text>`});
+  const cols=["var(--accent)","var(--alt)"];
+  series.forEach((s,si)=>{
+    if(s.length>1)g+=`<polyline fill="none" stroke="${cols[si]}" stroke-width="2.2" stroke-linejoin="round" points="${s.map(p=>x(p.i)+","+y(p.v)).join(" ")}"/>`;
+    s.forEach((p,pi)=>{g+=`<circle cx="${x(p.i)}" cy="${y(p.v)}" r="${pi===s.length-1?4:2.5}" fill="${cols[si]}"/>`});
+  });
+  $(id).className="";
+  $(id).innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="每日最低價走勢">${g}</svg>`;
+}
+function niceStep(raw){const p=Math.pow(10,Math.floor(Math.log10(raw||1)));const f=raw/p;return (f<=1?1:f<=2?2:f<=5?5:10)*p}
+
+(async()=>{
+  try{
+    const res=await fetch("data.json?t="+Date.now(),{cache:"no-store"});
+    if(!res.ok) throw 0;
+    const d=await res.json();
+    const reps=(d.reports||[]).slice().sort((a,b)=>String(a.checked_at||a.date).localeCompare(String(b.checked_at||b.date)));
+    render(reps);
+  }catch(e){$("updated").textContent="讀取資料失敗，請重新整理頁面"}
+})();
+</script>
+</body>
+</html>
