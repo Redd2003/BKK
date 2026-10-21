@@ -44,6 +44,16 @@ h2{font-family:var(--f-display);font-weight:700;font-size:1.35rem;letter-spacing
 .others{font-size:.82rem;color:var(--muted);border-top:1px dashed var(--line);padding-top:8px;display:grid;gap:2px}
 a{color:var(--accent)} a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .none{color:var(--muted);font-size:.9rem}
+.big{font-family:var(--f-display);font-weight:700;font-size:2.6rem;line-height:1;font-variant-numeric:tabular-nums;color:var(--accent)}
+.price{color:var(--accent);font-size:2.6rem}
+.bag{display:inline-block;font-size:.78rem;font-weight:700;padding:2px 8px;border-radius:6px;background:var(--down);color:var(--surface)}
+.bag.no{background:var(--up)}
+.refs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.refs>div{display:grid;gap:4px;padding:10px;border:1px solid var(--line);border-radius:8px;min-width:0}
+.refs .big{font-size:1.6rem}
+.refs .bag{justify-self:start}
+.lbl{font-size:.75rem;color:var(--muted)}
+.note{font-size:.82rem;color:var(--muted)}
 .charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:14px}
 .chart{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;min-width:0}
 .chart h3{margin:0 0 4px;font-size:.95rem;font-weight:700}
@@ -64,7 +74,7 @@ summary .mono{color:var(--muted);font-size:.85rem}
   <header class="board">
     <h1>BANGKOK · 12/20–12/26</h1>
     <div class="meta">
-      <span>高雄 KHH 直飛 · 6 人</span><span>桃園 TPE · 2 人</span><span>經濟艙來回 · 回程 12/26 · 價格含託運行李</span>
+      <span>高雄 KHH 直飛 · 6 人</span><span>桃園 TPE · 2 人</span><span>經濟艙來回 · 回程 12/26 · 以含託運行李價比較</span>
     </div>
     <div class="meta"><span id="updated">等待第一份報告</span></div>
   </header>
@@ -115,30 +125,35 @@ function render(reports){
   $("tickets").innerHTML=ROUTES.map(r=>ticket(r,latest,prev)).join("");
   chart("chart-khh",reports,["A","B"],6);
   chart("chart-tpe",reports,["C","D"],2);
-  $("log").innerHTML=reports.slice().reverse().map(rep=>`<details><summary><b>${esc(lab(rep))}</b><span class="mono">${ROUTES.map(r=>r.k+" "+fmt(perPerson(r,rep.routes?.[r.k]?.lowest))).join(" · ")}</span></summary>${rep.summary?`<p>${esc(rep.summary)}</p>`:""}${ROUTES.map(r=>{const x=rep.routes?.[r.k];return `<p class="others"><b>${r.from} 去 ${r.dep}</b>${x?.lowest?` ${esc(x.lowest.airline)} ${esc(x.lowest.flight)} · ${fmt(x.lowest.price_total)} · ${esc(x.lowest.source)}`:" 沒查到"}${x?.note?`<span>${esc(x.note)}</span>`:""}</p>`}).join("")}</details>`).join("");
+  $("log").innerHTML=reports.slice().reverse().map(rep=>`<details><summary><b>${esc(lab(rep))}</b><span class="mono">${ROUTES.map(r=>r.k+" "+fmt(perPerson(r,rep.routes?.[r.k]?.lowest))).join(" · ")}</span></summary>${rep.summary?`<p>${esc(rep.summary)}</p>`:""}${ROUTES.map(r=>{const x=rep.routes?.[r.k];return `<p class="others"><b>${r.from} 去 ${r.dep}</b>${x?.lowest?` ${esc(x.lowest.airline)} · ${fmt(x.lowest.price_total)} · ${esc(x.lowest.source)}`:(x?.ref?.out?` 單程去 ${fmt(x.ref.out.price_pp)}`:" 沒查到")}</p>`}).join("")}</details>`).join("");
 }
 
+function bagTag(v){return v===true?`<span class="bag">含行李</span>`:v===false?`<span class="bag no">未含行李</span>`:""}
 function ticket(r,rep,prev){
   const x=rep.routes?.[r.k]||{}, low=x.lowest;
   const head=`<div class="t-head"><span class="route">${r.from} <b>→</b> BKK${r.from==="KHH"?" 直飛":""}</span><span class="tag">去 ${r.dep} · 回 12/26 · ${r.pax} 人</span></div>`;
-  if(!low) return `<article class="ticket">${head}<div class="none">今天沒查到價格。${x.note?esc(x.note):""}</div>${missing(x)}</article>`;
+  const note=x.note?`<div class="note">${esc(x.note)}</div>`:"";
+  if(!low){
+    const ref=x.ref||{};
+    const leg=(l,lbl)=>`<div><span class="lbl">${lbl}・每人單程</span>${l&&typeof l.price_pp==="number"?`<span class="big">${fmt(l.price_pp)}</span><span class="lbl">${esc(l.airline||"")} ${esc(l.time||"")}</span>${bagTag(l.bag)}`:`<span class="big" style="color:var(--muted)">—</span><span class="lbl">查不到</span>`}</div>`;
+    const hasRef=ref.out||ref.back;
+    return `<article class="ticket">${head}<div class="none">查不到來回價${hasRef?"，單程參考：":""}</div>${hasRef?`<div class="refs">${leg(ref.out,"去 "+r.dep)}${leg(ref.back,"回 12/26")}</div>`:""}${note}</article>`;
+  }
   let delta="";
   const p0=prev?.routes?.[r.k]?.lowest?.price_total;
   if(typeof p0==="number"&&typeof low.price_total==="number"){
     const d=low.price_total-p0;
-    delta=d===0?`<span class="chip">與上一次持平</span>`:`<span class="chip ${d>0?"up":"down"}">${d>0?"▲ 漲":"▼ 跌"} ${fmt(Math.abs(d))}</span>`;
+    delta=d===0?`<span class="chip">持平</span>`:`<span class="chip ${d>0?"up":"down"}">${d>0?"▲":"▼"} ${fmt(Math.abs(d))}</span>`;
   }
   const url=safeUrl(low.url);
+  const hasBag=low.bag!==undefined?low.bag:(low.baggage?!/不含/.test(low.baggage):undefined);
   return `<article class="ticket">${head}
-    <div><div class="price">${fmt(low.price_total)}</div><div class="pp">${r.pax>1?`每人 ${fmt(perPerson(r,low))} · `:""}含託運行李${typeof low.price_no_bag==="number"?` · 不含行李 ${fmt(low.price_no_bag)}`:""}</div></div>
-    <div class="row"><span class="mono">${esc(low.airline)} ${esc(low.flight)}</span>${delta}${low.baggage?`<span class="chip">${esc(low.baggage)}</span>`:""}</div>
-    ${(low.out||low.back)?`<div class="times"><div><span class="tag">去程 ${r.dep}</span><b class="mono">${esc(low.out||"—")}</b></div><div><span class="tag">回程 12/26</span><b class="mono">${esc(low.back||"—")}</b></div></div>`:(low.times?`<div class="row mono" style="font-size:.82rem">${esc(low.times)}</div>`:"")}
-    <div class="row">來源：${url?`<a href="${esc(url)}" target="_blank" rel="noopener">${esc(low.source)}</a>`:esc(low.source)}</div>
-    ${(x.others||[]).length?`<div class="others">${x.others.map(o=>`<span>${esc(o.source)}：${fmt(o.price_total)}${o.airline?" · "+esc(o.airline):""}</span>`).join("")}</div>`:""}
-    ${missing(x)}</article>`;
+    <div><div class="price">${fmt(low.price_total)}</div><div class="pp">${r.pax>1?`每人 <b>${fmt(perPerson(r,low))}</b> `:""}${bagTag(hasBag)} ${delta}</div></div>
+    <div class="row"><span class="mono">${esc(low.airline)} ${esc(low.flight||"")}</span></div>
+    ${(low.out||low.back)?`<div class="times"><div><span class="tag">去 ${r.dep}</span><b class="mono">${esc(low.out||"—")}</b></div><div><span class="tag">回 12/26</span><b class="mono">${esc(low.back||"—")}</b></div></div>`:(low.times?`<div class="row mono" style="font-size:.82rem">${esc(low.times)}</div>`:"")}
+    <div class="row note">${url?`<a href="${esc(url)}" target="_blank" rel="noopener">${esc(low.source)}</a>`:esc(low.source)}${(x.others||[]).length?" · 其他："+x.others.map(o=>`${esc(o.source)} ${fmt(o.price_total)}`).join("、"):""}</div>
+    ${note}</article>`;
 }
-const missing=x=>(x.missing||[]).length?`<div class="others">沒查到：${x.missing.map(esc).join("、")}</div>`:"";
-
 function chart(id,reports,keys,pax){
   const rs=ROUTES.filter(r=>keys.includes(r.k));
   const series=rs.map(r=>reports.map((rep,i)=>({i,v:perPerson(r,rep.routes?.[r.k]?.lowest)})).filter(p=>typeof p.v==="number"));
