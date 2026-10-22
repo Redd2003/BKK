@@ -1,122 +1,230 @@
 {
-  "reports": [
-    {
-      "date": "2026-10-22",
-      "checked_at": "2026-10-22 00:49",
-      "summary": "高雄 12/21 每人便宜 358；桃園兩天差 20。皆為單程未含行李價，尚無來回含行李價。",
-      "routes": {
-        "A": {
-          "lowest": null,
-          "others": [],
-          "missing": [
-            "Google Flights",
-            "Skyscanner",
-            "Trip.com",
-            "易遊網",
-            "雄獅",
-            "華航",
-            "長榮",
-            "星宇",
-            "泰航",
-            "泰越捷",
-            "台灣虎航",
-            "亞航"
-          ],
-          "note": "12/26 回程只查到泰銖價，未換算",
-          "ref": {
-            "out": {
-              "price_pp": 3418,
-              "airline": "AirAsia 站",
-              "time": "",
-              "bag": false
-            },
-            "back": null
-          }
-        },
-        "B": {
-          "lowest": null,
-          "others": [],
-          "missing": [
-            "Google Flights",
-            "Skyscanner",
-            "Trip.com",
-            "易遊網",
-            "雄獅",
-            "華航",
-            "長榮",
-            "星宇",
-            "泰航",
-            "泰越捷",
-            "台灣虎航",
-            "亞航"
-          ],
-          "note": "回程同 A",
-          "ref": {
-            "out": {
-              "price_pp": 3060,
-              "airline": "泰國獅航",
-              "time": "19:05–21:30",
-              "bag": false
-            },
-            "back": null
-          }
-        },
-        "C": {
-          "lowest": null,
-          "others": [],
-          "missing": [
-            "Google Flights",
-            "Skyscanner",
-            "Trip.com",
-            "雄獅",
-            "華航",
-            "長榮",
-            "星宇",
-            "泰航",
-            "泰越捷",
-            "台灣虎航",
-            "亞航"
-          ],
-          "note": "12/26 回程查不到",
-          "ref": {
-            "out": {
-              "price_pp": 2995,
-              "airline": "泰國獅航",
-              "time": "21:20–00:15",
-              "bag": false
-            },
-            "back": null
-          }
-        },
-        "D": {
-          "lowest": null,
-          "others": [],
-          "missing": [
-            "Google Flights",
-            "Skyscanner",
-            "Trip.com",
-            "雄獅",
-            "華航",
-            "長榮",
-            "星宇",
-            "泰航",
-            "泰越捷",
-            "台灣虎航",
-            "亞航"
-          ],
-          "note": "12/26 回程查不到",
-          "ref": {
-            "out": {
-              "price_pp": 3015,
-              "airline": "泰越捷",
-              "time": "19:00–22:00",
-              "bag": false
-            },
-            "back": null
-          }
-        }
+ "reports": [
+  {
+   "date": "2026-10-22",
+   "checked_at": "2026-10-22 00:49",
+   "summary": "高雄 12/21 每人便宜 358；桃園兩天差 20。皆為單程未含行李價，尚無來回含行李價。",
+   "routes": {
+    "A": {
+     "lowest": null,
+     "others": [],
+     "missing": [
+      "Google Flights",
+      "Skyscanner",
+      "Trip.com",
+      "易遊網",
+      "雄獅",
+      "華航",
+      "長榮",
+      "星宇",
+      "泰航",
+      "泰越捷",
+      "台灣虎航",
+      "亞航"
+     ],
+     "note": "12/26 回程只查到泰銖價，未換算",
+     "ref": {
+      "out": {
+       "price_pp": 3418,
+       "airline": "AirAsia 站",
+       "time": "",
+       "bag": false
       },
-      "id": "2026-10-22_0049"
+      "back": null
+     }
+    },
+    "B": {
+     "lowest": null,
+     "others": [],
+     "missing": [
+      "Google Flights",
+      "Skyscanner",
+      "Trip.com",
+      "易遊網",
+      "雄獅",
+      "華航",
+      "長榮",
+      "星宇",
+      "泰航",
+      "泰越捷",
+      "台灣虎航",
+      "亞航"
+     ],
+     "note": "回程同 A",
+     "ref": {
+      "out": {
+       "price_pp": 3060,
+       "airline": "泰國獅航",
+       "time": "19:05–21:30",
+       "bag": false
+      },
+      "back": null
+     }
+    },
+    "C": {
+     "lowest": null,
+     "others": [],
+     "missing": [
+      "Google Flights",
+      "Skyscanner",
+      "Trip.com",
+      "雄獅",
+      "華航",
+      "長榮",
+      "星宇",
+      "泰航",
+      "泰越捷",
+      "台灣虎航",
+      "亞航"
+     ],
+     "note": "12/26 回程查不到",
+     "ref": {
+      "out": {
+       "price_pp": 2995,
+       "airline": "泰國獅航",
+       "time": "21:20–00:15",
+       "bag": false
+      },
+      "back": null
+     }
+    },
+    "D": {
+     "lowest": null,
+     "others": [],
+     "missing": [
+      "Google Flights",
+      "Skyscanner",
+      "Trip.com",
+      "雄獅",
+      "華航",
+      "長榮",
+      "星宇",
+      "泰航",
+      "泰越捷",
+      "台灣虎航",
+      "亞航"
+     ],
+     "note": "12/26 回程查不到",
+     "ref": {
+      "out": {
+       "price_pp": 3015,
+       "airline": "泰越捷",
+       "time": "19:00–22:00",
+       "bag": false
+      },
+      "back": null
+     }
     }
-  ]
+   },
+   "id": "2026-10-22_0049"
+  },
+  {
+   "date": "2026-10-23",
+   "checked_at": "2026-10-23 00:20",
+   "summary": "高雄：本次查不到 12/20、12/21 指定日期報價；桃園：單程去程 12/20 比 12/21 每人便宜 20（未含行李）。皆查不到 12/26 回程與行李費，無法比來回含行李價。",
+   "routes": {
+    "A": {
+     "lowest": null,
+     "others": [],
+     "missing": [
+      "Google Flights",
+      "Skyscanner",
+      "Trip.com",
+      "易遊網",
+      "雄獅",
+      "華航",
+      "長榮",
+      "星宇",
+      "泰航",
+      "泰越捷",
+      "台灣虎航",
+      "亞航"
+     ],
+     "note": "查不到 12/20 去程、12/26 回程指定日期報價（比價站只列其他日期）。參考：華航官網 KHH-BKK 12月來回經濟艙起價每人 12,682（未指定日期、行李未確認）",
+     "ref": {
+      "out": null,
+      "back": null
+     }
+    },
+    "B": {
+     "lowest": null,
+     "others": [],
+     "missing": [
+      "Google Flights",
+      "Skyscanner",
+      "Trip.com",
+      "易遊網",
+      "雄獅",
+      "華航",
+      "長榮",
+      "星宇",
+      "泰航",
+      "泰越捷",
+      "台灣虎航",
+      "亞航"
+     ],
+     "note": "查不到 12/21 去程、12/26 回程指定日期報價。參考同 A",
+     "ref": {
+      "out": null,
+      "back": null
+     }
+    },
+    "C": {
+     "lowest": null,
+     "others": [],
+     "missing": [
+      "Google Flights",
+      "Skyscanner",
+      "Trip.com",
+      "雄獅",
+      "華航",
+      "長榮",
+      "星宇",
+      "泰航",
+      "泰越捷",
+      "台灣虎航",
+      "亞航"
+     ],
+     "note": "僅易遊網有 12/20 單程去程（泰國獅航 TPE→DMK，未含行李），12/26 回程查不到。參考：星宇官網 TPE-BKK 12月來回經濟艙起價每人 10,689（未指定日期）",
+     "ref": {
+      "out": {
+       "price_pp": 2995,
+       "airline": "泰國獅航",
+       "time": "21:20–00:15",
+       "bag": false
+      },
+      "back": null
+     }
+    },
+    "D": {
+     "lowest": null,
+     "others": [],
+     "missing": [
+      "Google Flights",
+      "Skyscanner",
+      "Trip.com",
+      "雄獅",
+      "華航",
+      "長榮",
+      "星宇",
+      "泰航",
+      "泰越捷",
+      "台灣虎航",
+      "亞航"
+     ],
+     "note": "僅易遊網有 12/21 單程去程（泰越捷 TPE→BKK，未含行李），12/26 回程查不到",
+     "ref": {
+      "out": {
+       "price_pp": 3015,
+       "airline": "泰越捷",
+       "time": "19:00–22:00",
+       "bag": false
+      },
+      "back": null
+     }
+    }
+   },
+   "id": "2026-10-23_0020"
+  }
+ ]
 }
